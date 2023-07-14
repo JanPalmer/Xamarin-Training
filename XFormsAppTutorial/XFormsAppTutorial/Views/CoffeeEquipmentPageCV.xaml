@@ -1,0 +1,79 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:viewmodels="clr-namespace:XFormsAppTutorial.ViewModels"
+    xmlns:types="clr-namespace:XFormsAppTutorial.Types"
+    x:Name="CoffeeEquipmentCV"
+    x:Class="XFormsAppTutorial.Views.CoffeeEquipmentPageCV"
+    x:DataType="viewmodels:CoffeeEquipmentViewModel"
+    Background="White">
+
+    <ContentPage.BindingContext>
+        <viewmodels:CoffeeEquipmentViewModel/>
+    </ContentPage.BindingContext>
+
+    <ContentPage.Content>
+        <RefreshView IsRefreshing="{Binding IsBusy, Mode=OneWay}"
+                  Command="{Binding RefreshCommand}"
+                  RefreshColor="Black">
+            <CollectionView BackgroundColor="Transparent"
+                  ItemSizingStrategy="MeasureAllItems"
+                  ItemsLayout="VerticalList"
+                  RemainingItemsThreshold="1"                  
+                  SelectedItem="{Binding SelectedCoffee, Mode=TwoWay}"
+                  SelectionMode="Single"
+                  ItemsSource="{Binding Coffee}">
+                <CollectionView.ItemTemplate>
+                    <DataTemplate x:DataType="types:CoffeeType">
+                        <SwipeView>
+                            <SwipeView.RightItems>
+                                <SwipeItem Text="Favourite"
+                                      CommandParameter="{Binding .}"
+                                      Command="{Binding Source={x:Reference CoffeeEquipmentCV}, Path=BindingContext.SelectFavourite}"/>
+                                <SwipeItem Text="Delete" IsDestructive="True"/>
+                            </SwipeView.RightItems>
+                            <Grid Padding="10">
+                                <Frame CornerRadius="10"
+                                   HasShadow="True">
+                                    <StackLayout Orientation="Horizontal" VerticalOptions="Center" HorizontalOptions="StartAndExpand">
+                                        <Image Source="{Binding ImageUrl}"
+                                           WidthRequest="66"/>
+                                        <StackLayout VerticalOptions="Center" HorizontalOptions="Center">
+                                            <Label VerticalOptions="Center"
+                                       FontSize="Large"
+                                       Text="{Binding Name}"/>
+                                            <Label VerticalOptions="Center"
+                                       FontSize="Small"
+                                       Text="{Binding Description}"/>
+                                        </StackLayout>
+                                        <Button Text="Favourite"
+                                            Command="{Binding
+                                        Source={RelativeSource
+                                        AncestorType={x:Type viewmodels:CoffeeEquipmentViewModel}},
+                                        Path=SelectFavourite}"
+                                            CommandParameter="{Binding .}"/>
+                                    </StackLayout>
+                                </Frame>
+                            </Grid>
+                        </SwipeView>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+
+                <CollectionView.Header>
+                    <StackLayout HorizontalOptions="Center">
+                        <Label Text="Coffees"
+                           FontSize="Large"/>
+                    </StackLayout>
+                </CollectionView.Header>
+
+                <CollectionView.Footer>
+                    <StackLayout HorizontalOptions="Center">
+                        <Label Text="Footer"
+                           FontSize="Large"/>
+                    </StackLayout>
+                </CollectionView.Footer>
+            </CollectionView>
+        </RefreshView>
+    </ContentPage.Content>
+</ContentPage>
